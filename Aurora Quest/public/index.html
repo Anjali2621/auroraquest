@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Quest - Your Magical Study Companion</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Quicksand:wght@300;400;500;600;700&family=Indie+Flower&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #f5e6d3;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 31px, #e8d4ba 31px, #e8d4ba 32px),
+                linear-gradient(90deg, #fdf6ec 0%, #f5e6d3 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating Stickers & Decorations */
+        .floating-sticker {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .sticker-1 { top: 10%; left: 5%; font-size: 40px; animation-delay: 0s; }
+        .sticker-2 { top: 15%; right: 8%; font-size: 35px; animation-delay: 1s; }
+        .sticker-3 { top: 60%; left: 3%; font-size: 45px; animation-delay: 2s; }
+        .sticker-4 { bottom: 15%; right: 10%; font-size: 38px; animation-delay: 3s; }
+        .sticker-5 { bottom: 25%; left: 8%; font-size: 42px; animation-delay: 4s; }
+        .sticker-6 { top: 40%; right: 5%; font-size: 36px; animation-delay: 5s; }
+
+        /* Pushpins */
+        .pushpin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            pointer-events: none;
+        }
+
+        .pushpin::before {
+            content: '📌';
+            font-size: 24px;
+            position: absolute;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+
+        /* Washi Tape Effect */
+        .washi-tape {
+            position: absolute;
+            height: 25px;
+            opacity: 0.7;
+            transform: rotate(-2deg);
+        }
+
+        .washi-top {
+            top: -15px;
+            left: 0;
+            right: 0;
+            background: repeating-linear-gradient(45deg, #ffb6d9, #ffb6d9 10px, #ffd4e8 10px, #ffd4e8 20px);
+        }
+
+        /* Login Page with Notebook Aesthetic */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-box {
+            background: white;
+            background-image: 
+                linear-gradient(90deg, #ffebf0 1px, transparent 1px),
+                linear-gradient(#ffebf0 1px, transparent 1px);
+            background-size: 25px 25px, 25px 25px;
+            border-radius: 15px;
+            padding: 60px 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            border: 3px solid #fff;
+            outline: 2px dashed #ffb6d9;
+            outline-offset: 8px;
+        }
+
+        .login-box::before {
+            content: '✨';
+            position: absolute;
+            top: -25px;
+            left: 30px;
+            font-size: 45px;
+            animation: bounce 2s infinite;
+        }
+
+        .login-box::after {
+            content: '🌸';
+            position: absolute;
+            top: -20px;
+            right: 30px;
+            font-size: 40px;
+            animation: bounce 2s infinite 0.5s;
+        }
+
+        /* Decorative Corner Stickers */
+        .corner-sticker {
+            position: absolute;
+            font-size: 35px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .corner-sticker.top-left { top: 10px; left: 10px; }
+        .corner-sticker.bottom-right { bottom: 10px; right: 10px; }
+
+        .app-title {
+            font-family: 'Caveat', cursive;
+            font-size: 56px;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 5px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .app-title::after {
+            content: '✨';
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            font-size: 30px;
+        }
+
+        .app-subtitle {
+            text-align: center;
+            color: #a8a8a8;
+            margin-bottom: 35px;
+            font-size: 15px;
+            font-family: 'Indie Flower', cursive;
+        }
+
+        .input-group {
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            color: #ff6b9d;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+            font-family: 'Indie Flower', cursive;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 3px solid #ffd4e5;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #fffafc;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff9ec5;
+            box-shadow: 0 0 0 4px rgba(255, 158, 197, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ff9ec5 0%, #ffb4d6 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(255, 158, 197, 0.4);
+            position: relative;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 158, 197, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .toggle-auth {
+            text-align: center;
+            margin-top: 25px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .toggle-auth a {
+            color: #ff6b9d;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .toggle-auth a:hover {
+            color: #c44569;
+        }
+
+        /* Main App with Notebook Theme */
+        .app-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sticky Notes Style Header */
+        .app-header {
+            background: linear-gradient(135deg, #fff9c4, #ffecb3);
+            border-radius: 0;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #f9a825;
+            position: relative;
+            transform: rotate(-0.5deg);
+        }
+
+        .app-header::before {
+            content: '📌';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .user-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9ec5, #ffb4d6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .user-details h3 {
+            color: #d84315;
+            font-weight: 700;
+            font-size: 20px;
+            font-family: 'Caveat', cursive;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            padding: 12px 28px;
+            background: white;
+            border: 3px solid #ff6b9d;
+            border-radius: 12px;
+            color: #ff6b9d;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .logout-btn:hover {
+            background: #ff6b9d;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Spiral Notebook Sidebar */
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: white;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #e8d4ba 31px, #e8d4ba 32px);
+            border-radius: 0 15px 15px 0;
+            padding: 30px 20px 30px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-left: 3px solid #ff6b9d;
+            position: relative;
+            height: fit-content;
+        }
+
+        /* Spiral Holes */
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 20px;
+            bottom: 20px;
+            width: 8px;
+            background: 
+                radial-gradient(circle, #ddd 3px, transparent 3px),
+                radial-gradient(circle, #ddd 3px, transparent 3px);
+            background-size: 8px 40px;
+            background-position: 0 0, 0 20px;
+        }
+
+        .nav-item {
+            padding: 16px 22px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.3s;
+            color: #666;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(135deg, #fff0f6, #ffe0ef);
+            color: #ff6b9d;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #ffcce5, #ffb4d6);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            width: 22px;
+        }
+
+        /* Notebook Paper Content */
+        .content-area {
+            background: white;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #e8d4ba 31px, #e8d4ba 32px);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            min-height: 600px;
+        }
+
+        /* Red Margin Line */
+        .content-area::before {
+            content: '';
+            position: absolute;
+            left: 60px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ff6b9d;
+        }
+
+        .content-section {
+            display: none;
+            padding-left: 30px;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Polaroid-Style Mode Cards */
+        .mode-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .mode-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 20px 30px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            border: 8px solid white;
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .mode-card:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .mode-card:hover {
+            transform: rotate(0deg) translateY(-8px) !important;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        }
+
+        .mode-card::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="80">📎</text></svg>');
+            background-size: contain;
+        }
+
+        .mode-card i {
+            font-size: 55px;
+            color: #ff9ec5;
+            margin-bottom: 18px;
+        }
+
+        .mode-card h3 {
+            color: #ff6b9d;
+            margin-bottom: 12px;
+            font-size: 24px;
+            font-family: 'Caveat', cursive;
+        }
+
+        .mode-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Handwritten Style Headers */
+        .section-header {
+            font-family: 'Caveat', cursive;
+            font-size: 42px;
+            color: #ff6b9d;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10"><path d="M0,5 Q25,0 50,5 T100,5" stroke="%23ff9ec5" fill="none" stroke-width="2"/></svg>');
+            background-repeat: repeat-x;
+        }
+
+        /* Sticky Note Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #fff9c4, #ffecb3);
+            border-radius: 0;
+            padding: 28px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            transform: rotate(-1deg);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .stat-card:nth-child(even) {
+            background: linear-gradient(135deg, #f8bbd0, #ffccdd);
+            transform: rotate(1deg);
+        }
+
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, #c5e1a5, #dcedc8);
+        }
+
+        .stat-card:nth-child(4) {
+            background: linear-gradient(135deg, #b3e5fc, #e1f5fe);
+        }
+
+        .stat-card::before {
+            content: '📌';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+        }
+
+        .stat-card:hover {
+            transform: rotate(0deg) translateY(-5px) !important;
+        }
+
+        .stat-card h4 {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 40px;
+            font-weight: 700;
+            color: #d84315;
+            margin-bottom: 8px;
+            font-family: 'Caveat', cursive;
+        }
+
+        /* Chat Interface with Doodles */
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 3px dashed #ffb4d6;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .chat-container::before {
+            content: '💬';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 40px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            background: #fffafc;
+            border-radius: 12px;
+            margin-bottom: 22px;
+        }
+
+        .message {
+            margin-bottom: 18px;
+            display: flex;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 16px 22px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .message.ai .message-content {
+            background: linear-gradient(135deg, #fff0f6, #ffe0ef);
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #ff9ec5, #ffb4d6);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 16px 22px;
+            border: 3px solid #ffd4e5;
+            border-radius: 15px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #ff9ec5;
+            box-shadow: 0 0 0 4px rgba(255, 158, 197, 0.1);
+        }
+
+        .send-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #ff9ec5, #ffb4d6);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Scrapbook-Style Upload Area */
+        .upload-area {
+            background: white;
+            border-radius: 15px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 4px dashed #ffb4d6;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .upload-area::before,
+        .upload-area::after {
+            content: '📎';
+            position: absolute;
+            font-size: 35px;
+            opacity: 0.6;
+        }
+
+        .upload-area::before {
+            top: 15px;
+            left: 20px;
+            transform: rotate(-15deg);
+        }
+
+        .upload-area::after {
+            top: 15px;
+            right: 20px;
+            transform: rotate(15deg);
+        }
+
+        .upload-area:hover {
+            border-color: #ff9ec5;
+            background: #fffafc;
+            transform: scale(1.02);
+        }
+
+        .upload-area i {
+            font-size: 70px;
+            color: #ff9ec5;
+            margin-bottom: 25px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-radius: 15px;
+                border-left: 0;
+                border-top: 3px solid #ff6b9d;
+            }
+
+            .content-area::before {
+                display: none;
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+    <!-- Floating Stickers -->
+    <div class="floating-sticker sticker-1">⭐</div>
+    <div class="floating-sticker sticker-2">💖</div>
+    <div class="floating-sticker sticker-3">🌸</div>
+    <div class="floating-sticker sticker-4">✨</div>
+    <div class="floating-sticker sticker-5">💕</div>
+    <div class="floating-sticker sticker-6">🦋</div>
+
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <div class="corner-sticker top-left">🌟</div>
+            <div class="corner-sticker bottom-right">💝</div>
+            
+            <h1 class="app-title">Aurora Quest</h1>
+            <p class="app-subtitle">~ Your Magical Study Companion ~</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="loginEmail">✉️ Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="your.email@auroraquest.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="loginPassword">🔒 Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    ✨ Start Your Journey
+                </button>
+            </form>
+            
+            <div class="toggle-auth">
+                New here? <a onclick="toggleForms()">Create your magical account! 🌈</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Page -->
+    <div class="login-container" id="signupPage" style="display: none;">
+        <div class="login-box">
+            <div class="corner-sticker top-left">🎨</div>
+            <div class="corner-sticker bottom-right">🌺</div>
+            
+            <h1 class="app-title">Join Aurora</h1>
+            <p class="app-subtitle">~ Begin Your Learning Adventure ~</p>
+            
+            <form id="signupForm">
+                <div class="input-group">
+                    <label for="signupName">👤 Your Name</label>
+                    <input type="text" id="signupName" placeholder="Study Queen" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signupEmail">✉️ Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="your.email@auroraquest.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signupPassword">🔒 Create Password</label>
+                    <input type="password" id="signupPassword" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    🎉 Create Account
+                </button>
+            </form>
+            
+            <div class="toggle-auth">
+                Already have an account? <a onclick="toggleForms()">Login here! 💫</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="app-container" id="mainApp">
+        <!-- Sticky Note Header -->
+        <div class="app-header">
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <div class="user-details">
+                    <h3 id="userName">Study Queen 👑</h3>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span>🔥</span>
+                            <span id="streakCount">7</span> day streak
+                        </div>
+                        <div class="stat-item">
+                            <span>⭐</span>
+                            <span id="xpCount">2,450</span> XP
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Spiral Notebook Sidebar -->
+            <div class="sidebar">
+                <div class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-section="study">
+                    <i class="fas fa-book-open"></i>
+                    <span>Study Mode</span>
+                </div>
+                <div class="nav-item" data-section="tutors">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>AI Tutors</span>
+                </div>
+                <div class="nav-item" data-section="calendar">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Exam Calendar</span>
+                </div>
+                <div class="nav-item" data-section="progress">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Progress</span>
+                </div>
+                <div class="nav-item" data-section="sessions">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+
+                <!-- Dashboard -->
+                <div class="content-section active" id="dashboard">
+                    <h2 class="section-header">Welcome Back! 🌈</h2>
+                    <!-- Score Card with XP and Points -->
+                     <div style="background: linear-gradient(135deg, #ff9ec5, #ffb4d6); padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3); margin-bottom: 30px; position: relative; border: 4px solid white;">
+                        <div class="pushpin" style="top: -15px; left: 50%; transform: translateX(-50%);"></div>
+                        <h3 style="color: white; font-family: 'Caveat', cursive; font-size: 36px; margin-bottom: 25px; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">Your Score Card ⭐</h3>
+    
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                            <!-- XP Card -->
+                             <div style="background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: rotate(-2deg); transition: all 0.3s;" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'" onmouseout="this.style.transform='rotate(-2deg)'">
+
+                                <div style="font-size: 50px; margin-bottom: 10px;">💎</div>
+                                <div style="font-size: 42px; font-weight: 700; color: #ff6b9d; font-family: 'Caveat', cursive; margin-bottom: 5px;" id="totalXP">2,450</div>
+                                <div style="font-size: 14px; color: #666; font-weight: 600;">Total Experience Points</div>
+                                <div style="margin-top: 15px; background: #f0f0f0; border-radius: 10px; height: 8px; overflow: hidden;">
+                                    <div style="width: 65%; height: 100%; background: linear-gradient(90deg, #ff9ec5, #ffb4d6); border-radius: 10px; transition: width 1s ease;"></div>
+                                </div>
+                                <div style="font-size: 12px; color: #999; margin-top: 8px;">Level 12 → Level 13</div>
+                            </div>
+                            <!-- Points Card -->
+                             <div style="background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: rotate(2deg); transition: all 0.3s;" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'" onmouseout="this.style.transform='rotate(2deg)'">
+                                <div style="font-size: 50px; margin-bottom: 10px;">🏆</div>
+                                <div style="font-size: 42px; font-weight: 700; color: #ffa726; font-family: 'Caveat', cursive; margin-bottom: 5px;" id="totalPoints">1,850</div>
+                                <div style="font-size: 14px; color: #666; font-weight: 600;">Aurora Points</div>
+                                <div style="margin-top: 15px; font-size: 13px; color: #4caf50; font-weight: 600;">
+                                    <i class="fas fa-arrow-up"></i> +250 this week!
+                                </div>
+                            </div>
+        
+                            <!-- Streak Card -->
+                             <div style="background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: rotate(-1deg); transition: all 0.3s;" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'" onmouseout="this.style.transform='rotate(-1deg)'">
+                                <div style="font-size: 50px; margin-bottom: 10px;">🔥</div>
+                                <div style="font-size: 42px; font-weight: 700; color: #ff6b4a; font-family: 'Caveat', cursive; margin-bottom: 5px;">7 Days</div>
+                                <div style="font-size: 14px; color: #666; font-weight: 600;">Study Streak</div>
+                                <div style="margin-top: 15px; font-size: 13px; color: #ff9800; font-weight: 600;">
+                                    Keep it burning! 🔥
+                                </div>
+                            </div>
+                            <!-- Rank Card -->
+                             <div style="background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: rotate(1deg); transition: all 0.3s;" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'" onmouseout="this.style.transform='rotate(1deg)'">
+                                <div style="font-size: 50px; margin-bottom: 10px;">👑</div>
+                                <div style="font-size: 42px; font-weight: 700; color: #9c27b0; font-family: 'Caveat', cursive; margin-bottom: 5px;">#12</div>
+                                <div style="font-size: 14px; color: #666; font-weight: 600;">Global Rank</div>
+                                <div style="margin-top: 15px; font-size: 13px; color: #2196f3; font-weight: 600;">
+                                    <i class="fas fa-arrow-up"></i> Up 5 places!
+                                </div>
+                            </div>
+    
+                        </div>
+
+                    </div>
+
+                       
+                    <div class="mode-selection">
+                        <div class="mode-card" onclick="showSection('study')">
+                            <i class="fas fa-upload"></i>
+                            <h3>Upload & Learn</h3>
+                            <p>Upload your materials for personalized AI-powered learning ✨</p>
+                        </div>
+                        <div class="mode-card" onclick="showSection('tutors')">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>AI Language Tutors</h3>
+                            <p>Learn languages with voice practice & real-time feedback 🎙️</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Study Time Today</h4>
+                            <div class="stat-value">2.5h</div>
+                            <p style="color: #4caf50; font-size: 13px; font-weight: 600;">
+                                <i class="fas fa-arrow-up"></i> +30% from yesterday!
+                            </p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Quizzes Completed</h4>
+                            <div class="stat-value">12</div>
+                            <p style="color: #666; font-size: 13px;">This week 📝</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Current Streak</h4>
+                            <div class="stat-value">🔥 7</div>
+                            <p style="color: #ff9800; font-size: 13px; font-weight: 600;">Days in a row!</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Badges Earned</h4>
+                            <div class="stat-value">🏆 5</div>
+                            <p style="color: #666; font-size: 13px;">2 more to next level!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Mode -->
+                <div class="content-section" id="study">
+                    <h2 class="section-header">Study Mode 📚</h2>
+                    
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3 style="color: #ff6b9d; margin: 25px 0 15px; font-family: 'Caveat', cursive; font-size: 32px;">Upload Your Study Materials</h3>
+                        <p style="color: #999; font-size: 15px;">PDFs, notes, textbooks - we support it all! 📖✨</p>
+                        <input type="file" id="fileInput" style="display: none;" accept=".pdf,.txt,.doc,.docx" multiple>
+                    </div>
+
+                    <div class="chat-container" style="margin-top: 30px;">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai">
+                                <div class="message-content">
+                                    Hi there! 👋 Upload your materials and I'll help you study! I can create quizzes, explain concepts, and answer all your questions! ✨💖
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything about your materials... 💭">
+                            <button class="send-btn" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Tutors -->
+                <div class="content-section" id="tutors">
+                    <h2 class="section-header">Language Tutors 🌍</h2>
+                    
+                    <div class="mode-selection" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">
+                        <div class="mode-card">
+                            <i class="fas fa-language"></i>
+                            <h3>Spanish 🇪🇸</h3>
+                            <p>Practice conversation with ultra-low latency voice AI</p>
+                            <button class="btn-primary" style="margin-top: 18px; padding: 12px; font-size: 14px;">
+                                <i class="fas fa-microphone"></i> Start Speaking
+                            </button>
+                        </div>
+                        <div class="mode-card">
+                            <i class="fas fa-globe"></i>
+                            <h3>French 🇫🇷</h3>
+                            <p>Real-time pronunciation corrections & feedback</p>
+                            <button class="btn-primary" style="margin-top: 18px; padding: 12px; font-size: 14px;">
+                                <i class="fas fa-microphone"></i> Start Speaking
+                            </button>
+                        </div>
+                        <div class="mode-card">
+                            <i class="fas fa-star"></i>
+                            <h3>Japanese 🇯🇵</h3>
+                            <p>Master speaking with adaptive difficulty</p>
+                            <button class="btn-primary" style="margin-top: 18px; padding: 12px; font-size: 14px;">
+                                <i class="fas fa-microphone"></i> Start Speaking
+                            </button>
+                        </div>
+                        <div class="mode-card">
+                            <i class="fas fa-heart"></i>
+                            <h3>More Soon! ✨</h3>
+                            <p>German, Mandarin, Korean & more languages</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress -->
+                <div class="content-section" id="progress">
+                    <h2 class="section-header">Your Progress 📈</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Total XP Earned</h4>
+                            <div class="stat-value">2,450</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Materials Uploaded</h4>
+                            <div class="stat-value">18</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Study Sessions</h4>
+                            <div class="stat-value">42</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Quiz Accuracy</h4>
+                            <div class="stat-value">87%</div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-top: 25px;">
+                        <h3 style="font-family: 'Caveat', cursive; font-size: 32px; color: #ff6b9d; margin-bottom: 25px;">Recent Achievements 🏆</h3>
+                        <div style="display: flex; gap: 25px; flex-wrap: wrap; justify-content: center;">
+                            <div style="text-align: center; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                <div style="font-size: 50px;">🔥</div>
+                                <p style="font-size: 13px; color: #666; margin-top: 8px; font-weight: 600;">7-Day Streak</p>
+                            </div>
+                            <div style="text-align: center; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                <div style="font-size: 50px;">📚</div>
+                                <p style="font-size: 13px; color: #666; margin-top: 8px; font-weight: 600;">Quiz Master</p>
+                            </div>
+                            <div style="text-align: center; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                <div style="font-size: 50px;">⭐</div>
+                                <p style="font-size: 13px; color: #666; margin-top: 8px; font-weight: 600;">Fast Learner</p>
+                            </div>
+                            <div style="text-align: center; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                <div style="font-size: 50px;">🎯</div>
+                                <p style="font-size: 13px; color: #666; margin-top: 8px; font-weight: 600;">Perfect Score</p>
+                            </div>
+                            <div style="text-align: center; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                <div style="font-size: 50px;">💝</div>
+                                <p style="font-size: 13px; color: #666; margin-top: 8px; font-weight: 600;">Early Bird</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session History -->
+                <div class="content-section" id="sessions">
+                    <h2 class="section-header">Session History 📝</h2>
+                    
+                    <div style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                        <div style="padding: 20px; background: linear-gradient(135deg, #fff9c4, #ffecb3); border-radius: 12px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="color: #d84315; margin-bottom: 8px; font-family: 'Caveat', cursive; font-size: 22px;">🧬 Biology - Cell Division</h4>
+                                    <p style="font-size: 14px; color: #666;">45 minutes • 12 questions answered</p>
+                                </div>
+                                <span style="color: #4caf50; font-weight: 700; font-size: 18px;">92%</span>
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 20px; background: linear-gradient(135deg, #f8bbd0, #ffccdd); border-radius: 12px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="color: #c2185b; margin-bottom: 8px; font-family: 'Caveat', cursive; font-size: 22px;">🇪🇸 Spanish Conversation</h4>
+                                    <p style="font-size: 14px; color: #666;">30 minutes • Voice practice session</p>
+                                </div>
+                                <span style="color: #ff9800; font-weight: 700; font-size: 18px;">85%</span>
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 20px; background: linear-gradient(135deg, #c5e1a5, #dcedc8); border-radius: 12px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="color: #558b2f; margin-bottom: 8px; font-family: 'Caveat', cursive; font-size: 22px;">📜 History - World War II</h4>
+                                    <p style="font-size: 14px; color: #666;">1 hour • Quiz completed with flying colors</p>
+                                </div>
+                                <span style="color: #4caf50; font-weight: 700; font-size: 18px;">95%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Exam Calendar -->
+<div class="content-section" id="calendar">
+    <h2 class="section-header">Exam Calendar 📅</h2>
+    
+    <!-- Hand-Sketched Calendar at Top (No Notebook Lines) -->
+    <div style="background: white; padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); position: relative; margin-bottom: 30px; border: 3px dashed #ffb4d6; margin-top: 0;">
+        <div class="pushpin" style="top: -12px; left: 50%; transform: translateX(-50%);"></div>
+        
+        <!-- Calendar Header with Hand-drawn Style -->
+        <div style="text-align: center; margin-bottom: 25px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button onclick="changeMonth(-1)" style="padding: 10px 18px; background: transparent; border: 3px solid #ff9ec5; border-radius: 50%; color: #ff9ec5; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 16px;" onmouseover="this.style.background='#ff9ec5'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#ff9ec5'">
+                    ←
+                </button>
+                <h3 id="currentMonth" style="font-family: 'Caveat', cursive; font-size: 42px; color: #ff6b9d; margin: 0; text-decoration: underline; text-decoration-style: wavy; text-underline-offset: 8px;">November 2025</h3>
+                <button onclick="changeMonth(1)" style="padding: 10px 18px; background: transparent; border: 3px solid #ff9ec5; border-radius: 50%; color: #ff9ec5; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 16px;" onmouseover="this.style.background='#ff9ec5'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#ff9ec5'">
+                    →
+                </button>
+            </div>
+        </div>
+
+        <!-- Sketched Calendar Grid -->
+        <div style="background: linear-gradient(135deg, #fffef7, #fff9f0); padding: 25px; border-radius: 15px; border: 2px solid #ff9ec5; position: relative;">
+            <!-- Corner Decorations -->
+            <div style="position: absolute; top: -10px; left: -10px; font-size: 30px;">✏️</div>
+            <div style="position: absolute; top: -10px; right: -10px; font-size: 30px;">✨</div>
+            <div style="position: absolute; bottom: -10px; left: -10px; font-size: 30px;">🌸</div>
+            <div style="position: absolute; bottom: -10px; right: -10px; font-size: 30px;">💕</div>
+            
+            <!-- Day Headers with Hand-drawn Style -->
+            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 15px;">
+                <div style="text-align: center; font-weight: 700; color: #ff6b9d; padding: 8px; font-family: 'Caveat', cursive; font-size: 20px; border-bottom: 3px solid #ffb4d6;">Sun</div>
+                <div style="text-align: center; font-weight: 700; color: #ff6b9d; padding: 8px; font-family: 'Caveat', cursive; font-size: 20px; border-bottom: 3px solid #ffb4d6;">Mon</div>
+                <div style="text-align: center; font-weight: 700; color: #ff6b9d; padding: 8px; font-family: 'Caveat', cursive; font-size: 20px; border-bottom: 3px solid #ffb4d6;">Tue</div>
+                <div style="text-align: center; font-weight: 700; color: #ff6b9d; padding: 8px; font-family: 'Caveat', cursive; font-size: 20px; border-bottom: 3px solid #ffb4d6;">Wed</div>
+                <div style="text-align: center; font-weight: 700; color: #ff6b9d; padding: 8px; font-family: 'Caveat', cursive; font-size: 20px; border-bottom: 3px solid #ffb4d6;">Thu</div>
+                <div style="text-align: center; font-weight: 700; color: #ff6b9d; padding: 8px; font-family: 'Caveat', cursive; font-size: 20px; border-bottom: 3px solid #ffb4d6;">Fri</div>
+                <div style="text-align: center; font-weight: 700; color: #ff6b9d; padding: 8px; font-family: 'Caveat', cursive; font-size: 20px; border-bottom: 3px solid #ffb4d6;">Sat</div>
+            </div>
+            
+            <!-- Calendar Days with Sketched Style -->
+            <div id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;">
+                <!-- Days will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px; font-family: 'Indie Flower', cursive; font-size: 14px;">
+                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #ff9ec5, #ffb4d6); border-radius: 50%;"></div>
+                <span>Today</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-family: 'Indie Flower', cursive; font-size: 14px;">
+                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #fff9c4, #ffecb3); border-radius: 50%; border: 2px solid #ffa726;"></div>
+                <span>Exam Day</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-family: 'Indie Flower', cursive; font-size: 14px;">
+                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #c5e1a5, #dcedc8); border-radius: 50%; border: 2px solid #66bb6a;"></div>
+                <span>Quiz/Assignment</span>
+            </div>
+        </div>
+    </div>
+    <!-- Upcoming Exams List Below Calendar with Notebook Design -->
+<div style="background: white; background-image: repeating-linear-gradient(transparent, transparent 31px, #e8d4ba 31px, #e8d4ba 32px); padding: 30px 30px 30px 70px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); position: relative;">
+    <!-- Red Margin Line -->
+    <div style="position: absolute; left: 60px; top: 0; bottom: 0; width: 2px; background: #ff6b9d;"></div>
+    
+    <!-- Pushpin -->
+    <div class="pushpin" style="top: -12px; right: 40px;"></div>
+    
+    <h3 style="font-family: 'Caveat', cursive; font-size: 38px; color: #ff6b9d; margin-bottom: 25px; text-align: center;">Upcoming Exams 📝</h3>
+    
+    <div style="display: grid; gap: 15px;">
+        <!-- Exam Item 1 -->
+        <div style="padding: 22px; background: linear-gradient(135deg, #fff9c4, #ffecb3); border-radius: 15px; border-left: 6px solid #ffa726; cursor: pointer; transition: all 0.3s; transform: rotate(-0.5deg); box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onmouseover="this.style.transform='rotate(0deg) translateX(8px) scale(1.02)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='rotate(-0.5deg)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.1)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                    <h4 style="color: #d84315; font-size: 24px; margin-bottom: 8px; font-family: 'Caveat', cursive;">📚 Biology Mid-term Exam</h4>
+                    <p style="color: #666; font-size: 15px; margin: 5px 0; font-weight: 600;">Chapter 1-5 • Multiple Choice + Essay</p>
+                    <p style="color: #999; font-size: 14px; margin-top: 8px;"><i class="fas fa-calendar"></i> November 18, 2025 • 10:00 AM</p>
+                </div>
+                <div style="text-align: center; background: white; padding: 18px 25px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); min-width: 100px;">
+                    <div style="font-size: 32px; font-weight: 700; color: #ff6b9d; font-family: 'Caveat', cursive; line-height: 1;">4</div>
+                    <div style="font-size: 13px; color: #666; margin-top: 5px; font-weight: 600;">days left</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Item 2 -->
+        <div style="padding: 22px; background: linear-gradient(135deg, #f8bbd0, #ffccdd); border-radius: 15px; border-left: 6px solid #ec407a; cursor: pointer; transition: all 0.3s; transform: rotate(0.5deg); box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onmouseover="this.style.transform='rotate(0deg) translateX(8px) scale(1.02)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='rotate(0.5deg)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.1)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                    <h4 style="color: #c2185b; font-size: 24px; margin-bottom: 8px; font-family: 'Caveat', cursive;">🧮 Mathematics Final Exam</h4>
+                    <p style="color: #666; font-size: 15px; margin: 5px 0; font-weight: 600;">Calculus & Algebra • 3 hours</p>
+                    <p style="color: #999; font-size: 14px; margin-top: 8px;"><i class="fas fa-calendar"></i> November 22, 2025 • 9:00 AM</p>
+                </div>
+                <div style="text-align: center; background: white; padding: 18px 25px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); min-width: 100px;">
+                    <div style="font-size: 32px; font-weight: 700; color: #ff6b9d; font-family: 'Caveat', cursive; line-height: 1;">8</div>
+                    <div style="font-size: 13px; color: #666; margin-top: 5px; font-weight: 600;">days left</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Item 3 -->
+        <div style="padding: 22px; background: linear-gradient(135deg, #c5e1a5, #dcedc8); border-radius: 15px; border-left: 6px solid #66bb6a; cursor: pointer; transition: all 0.3s; transform: rotate(-0.3deg); box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onmouseover="this.style.transform='rotate(0deg) translateX(8px) scale(1.02)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='rotate(-0.3deg)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.1)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                    <h4 style="color: #558b2f; font-size: 24px; margin-bottom: 8px; font-family: 'Caveat', cursive;">🌍 Geography Quiz</h4>
+                    <p style="color: #666; font-size: 15px; margin: 5px 0; font-weight: 600;">World Capitals & Climate Zones</p>
+                    <p style="color: #999; font-size: 14px; margin-top: 8px;"><i class="fas fa-calendar"></i> November 25, 2025 • 2:00 PM</p>
+                </div>
+                <div style="text-align: center; background: white; padding: 18px 25px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); min-width: 100px;">
+                    <div style="font-size: 32px; font-weight: 700; color: #ff6b9d; font-family: 'Caveat', cursive; line-height: 1;">11</div>
+                    <div style="font-size: 13px; color: #666; margin-top: 5px; font-weight: 600;">days left</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Item 4 -->
+        <div style="padding: 22px; background: linear-gradient(135deg, #b3e5fc, #e1f5fe); border-radius: 15px; border-left: 6px solid #29b6f6; cursor: pointer; transition: all 0.3s; transform: rotate(0.4deg); box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onmouseover="this.style.transform='rotate(0deg) translateX(8px) scale(1.02)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='rotate(0.4deg)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.1)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                    <h4 style="color: #0277bd; font-size: 24px; margin-bottom: 8px; font-family: 'Caveat', cursive;">📜 History Research Paper</h4>
+                    <p style="color: #666; font-size: 15px; margin: 5px 0; font-weight: 600;">World War II Analysis • 2000 words</p>
+                    <p style="color: #999; font-size: 14px; margin-top: 8px;"><i class="fas fa-calendar"></i> November 28, 2025 • Due 11:59 PM</p>
+                </div>
+                <div style="text-align: center; background: white; padding: 18px 25px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); min-width: 100px;">
+                    <div style="font-size: 32px; font-weight: 700; color: #ff6b9d; font-family: 'Caveat', cursive; line-height: 1;">14</div>
+                    <div style="font-size: 13px; color: #666; margin-top: 5px; font-weight: 600;">days left</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Exam Button -->
+    <button onclick="addExam()" style="width: 100%; margin-top: 25px; padding: 16px; background: linear-gradient(135deg, #ff9ec5, #ffb4d6); border: none; border-radius: 15px; color: white; font-weight: 700; font-size: 17px; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3); font-family: 'Quicksand', sans-serif;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(255, 107, 157, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(255, 107, 157, 0.3)'">
+        <i class="fas fa-plus-circle"></i> Add New Exam
+    </button>
+</div>
+
+</div>
+
+ <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" />
+
+
+    <script>
+        // Toggle Forms
+        function toggleForms() {
+            document.getElementById('loginPage').style.display = 
+                document.getElementById('loginPage').style.display === 'none' ? 'flex' : 'none';
+            document.getElementById('signupPage').style.display = 
+                document.getElementById('signupPage').style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const name = email.split('@')[0];
+            login(name);
+        });
+
+        // Signup
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            login(name);
+        });
+
+        function login(name) {
+            document.getElementById('userName').textContent = name.charAt(0).toUpperCase() + name.slice(1) + ' 👑';
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('signupPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const section = this.dataset.section;
+                showSection(section);
+                
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout? 🥺')) {
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('loginPage').style.display = 'flex';
+            }
+        });
+
+        // Chat
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // REAL AI CHAT USING YOUR PDF CONTENT (TF-IDF RAG)
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            
+            const userMsg = document.createElement('div');
+            userMsg.className = "message user";
+            userMsg.innerHTML = `<div class="message-content">${message}</div>`;
+            chatMessages.appendChild(userMsg);
+            input.value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            const aiMsg = document.createElement('div');
+            aiMsg.className = "message ai";
+            aiMsg.innerHTML = `<div class="message-content">🤔 Searching your study material...</div>`;
+            chatMessages.appendChild(aiMsg);
+            
+            try {
+                const res = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        message,
+                        docs: window.currentDocs || []
+                    })
+                });
+                
+                const data = await res.json();
+                if (data.error) {
+                    aiMsg.innerHTML = `<div class="message-content">❌ ${data.error}</div>`;
+                } else {
+                    aiMsg.innerHTML = `<div class="message-content">${data.answer.replace(/\n/g, "<br>")}</div>`;
+                }
+            } catch {
+                aiMsg.innerHTML = `<div class="message-content">❌ Network error</div>`;
+            }
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+
+
+        // REAL FILE UPLOAD HANDLER (RAG)
+        async function uploadFileHandler(e) {
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+            const file = files[0];
+            
+            const fd = new FormData();
+            fd.append("file", file);
+            
+            const chatMessages = document.getElementById('chatMessages');
+            const aiMsg = document.createElement('div');
+            aiMsg.className = "message ai";
+            aiMsg.innerHTML = `<div class="message-content">📚 Uploading "${file.name}"... please wait</div>`;
+            chatMessages.appendChild(aiMsg);
+            
+            try {
+                const res = await fetch("/api/upload", { method: "POST", body: fd });
+                const data = await res.json();
+                
+                if (data.error) {
+                    aiMsg.innerHTML = `<div class="message-content">❌ Upload failed: ${data.error}</div>`;
+                } else {
+                    aiMsg.innerHTML = `<div class="message-content">✨ Uploaded: ${data.name}<br>📌 Processed ${data.chunks} chunks</div>`;
+                    window.currentDocs = window.currentDocs || [];
+                    window.currentDocs.push(data.id);
+                }
+            } catch (err) {
+                aiMsg.innerHTML = `<div class="message-content">❌ Network error while uploading</div>`;
+            }
+        }
+        document.getElementById('fileInput').addEventListener('change', uploadFileHandler);
+
+// Calendar functionality
+let currentMonth = 10; // November (0-indexed)
+let currentYear = 2025;
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+
+const examDates = {
+    '2025-11-18': { subject: 'Biology', type: 'exam', color: '#fff9c4' },
+    '2025-11-22': { subject: 'Math', type: 'exam', color: '#f8bbd0' },
+    '2025-11-25': { subject: 'Geography', type: 'quiz', color: '#c5e1a5' },
+    '2025-11-28': { subject: 'History', type: 'paper', color: '#b3e5fc' }
+};
+
+function generateCalendar() {
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const calendarGrid = document.getElementById('calendarGrid');
+    const today = new Date();
+    
+    calendarGrid.innerHTML = '';
+    
+    // Empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+        calendarGrid.innerHTML += '<div style="padding: 18px;"></div>';
+    }
+    
+    // Generate days with hand-drawn style
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isToday = today.getDate() === day && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+        const hasExam = examDates[dateStr];
+        
+        let dayStyle = `
+            padding: 18px 15px; 
+            text-align: center; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            position: relative;
+            border: 2px solid transparent;
+            font-family: 'Caveat', cursive;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        `;
+        
+        if (isToday) {
+            dayStyle += `
+                background: linear-gradient(135deg, #ff9ec5, #ffb4d6); 
+                color: white; 
+                font-weight: 700; 
+                box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+                border: 3px dashed white;
+                transform: rotate(-2deg);
+            `;
+        } else if (hasExam) {
+            dayStyle += `
+                background: linear-gradient(135deg, ${hasExam.color}, white); 
+                font-weight: 700; 
+                border: 3px solid ${hasExam.type === 'exam' ? '#ffa726' : '#66bb6a'};
+                transform: rotate(${Math.random() > 0.5 ? '1' : '-1'}deg);
+            `;
+        } else {
+            dayStyle += `
+                background: white; 
+                border: 2px dashed #e0e0e0;
+                color: #666;
+            `;
+        }
+        
+        let examIndicator = hasExam ? `<div style="font-size: 20px; margin-top: 3px;" title="${hasExam.subject}">📝</div>` : '';
+        
+        calendarGrid.innerHTML += `
+            <div style="${dayStyle}" 
+                 onmouseover="this.style.transform='scale(1.1) rotate(0deg)'; this.style.zIndex='10'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'" 
+                 onmouseout="this.style.transform='scale(1) rotate(${isToday ? '-2' : hasExam ? (Math.random() > 0.5 ? '1' : '-1') : '0'}deg)'; this.style.zIndex='1'; this.style.boxShadow='${isToday ? '0 5px 15px rgba(255, 107, 157, 0.4)' : 'none'}'">
+                <div style="font-size: 22px; ${isToday ? 'color: white;' : 'color: #333;'} font-weight: 700;">${day}</div>
+                ${hasExam ? `<div style="font-size: 11px; margin-top: 3px; color: #666; font-family: 'Indie Flower', cursive;">${hasExam.subject}</div>` : ''}
+                ${examIndicator}
+            </div>
+        `;
+    }
+    
+    document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+}
+
+function changeMonth(direction) {
+    currentMonth += direction;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    } else if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    generateCalendar();
+}
+
+function addExam() {
+    alert('📅 Add Exam Feature!\n\nThis would open a form to add:\n✏️ Exam name\n📚 Subject\n📆 Date & Time\n⏱️ Duration\n📝 Notes\n\nComing soon! ✨');
+}
+
+// Initialize calendar when page loads
+if (document.getElementById('calendarGrid')) {
+    generateCalendar();
+}
+
+
+    </script>
+</body>
+</html>
